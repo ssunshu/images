@@ -1,9 +1,9 @@
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.Scanner;
 
 public class repo {
@@ -13,6 +13,7 @@ public class repo {
     System.setProperty("user.dir", s +"\\Images");
     
     String imageFile = System.getProperty("user.dir");
+    System.out.println(imageFile);
     
     System.out.println("What would you like to do");
     System.out.println("1 - add image");
@@ -23,18 +24,14 @@ public class repo {
     String command = input.nextLine();
     
     if(command.equals("1")) {
-      System.out.println("Enter the full address of the image to be added");
-      String image = input.nextLine();
+      System.out.println("Enter the url of the image to be added");
+      String url = input.nextLine();
       
-      f = new File(image);
-      if(f.exists() && !f.isDirectory()) { 
-        File dest = new File(imageFile);
-        try {
-          copyFileUsingStream(f, dest);
-          System.out.println("successfully copied");
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+      try {
+        downloadImage(url, imageFile);
+      } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
       }
     }
     
@@ -63,20 +60,23 @@ public class repo {
     }
   }
   
-  private static void copyFileUsingStream(File source, File dest) throws IOException {
-    InputStream i = null;
-    OutputStream o = null;
-    try {
-        i = new FileInputStream(source);
-        o = new FileOutputStream(dest);
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = i.read(buffer)) > 0) {
-            o.write(buffer, 0, length);
-        }
-    } finally {
-        i.close();
-        o.close();
+  public static void downloadImage(String imageUrl, String imageFile) throws IOException {
+    URL url = new URL(imageUrl);
+    String fileName = url.getFile();
+    String destName = imageFile + fileName.substring(fileName.lastIndexOf("/"));
+    System.out.println(destName);
+ 
+    InputStream is = url.openStream();
+    OutputStream os = new FileOutputStream(destName);
+ 
+    byte[] b = new byte[2048];
+    int length;
+ 
+    while ((length = is.read(b)) != -1) {
+        os.write(b, 0, length);
     }
-}
+ 
+    is.close();
+    os.close();
+  }
 }
