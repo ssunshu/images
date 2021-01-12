@@ -14,14 +14,13 @@ public class repo {
     System.setProperty("user.dir", s + "\\Images");
 
     String imageFile = System.getProperty("user.dir");
-    System.out.println(imageFile);
 
     System.out.println("What would you like to do");
-    System.out.println("1 - add image");
-    System.out.println("2 - remove image");
-    System.out.println("Any other key - exit");
 
     while (true) {
+      System.out.println("1 - add image");
+      System.out.println("2 - remove image");
+      System.out.println("Any other key - exit");
       Scanner input = new Scanner(System.in);
       String command = input.nextLine();
 
